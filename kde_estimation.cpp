@@ -19,9 +19,9 @@ NumericVector kde_cpp(NumericVector s, NumericVector x, double h) {
   for(j = 0; j < m; j++){
     sum = 0;
     for(i = 0; i < n; i++){
-      sum += exp(-(pow((x[j]-s[i])/h,2))/2)/sqrt(2*M_PI);
+      sum += exp(-(pow((x[j]-s[i])/h,2))/2);
     }
-    out[j] = sum/(n*h);
+    out[j] = sum/(sqrt(2*M_PI)*n*h);
   }
   return out;
 }
