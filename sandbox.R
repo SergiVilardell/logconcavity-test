@@ -70,7 +70,7 @@ binary_search_h <- function(h_grid, x_grid, sample_tail){
 
 # Test --------------------------------------------------------------------
 
-for(m in 1:1){ 
+for(m in 1:length(test_file)){ 
   
   #Read data
   test0  <- data.table::fread(test_file[m],header = F,
@@ -90,7 +90,7 @@ for(m in 1:1){
   
   # Prepare tail sample -----------------------------------------------------
   
-  for (k in 250:1000) {
+  for (k in 1:1000) {
     print(k)
     sample_data <- sample(test0$X, size = 1000, replace = T)
     sample_list[[k]] <- sample_data
@@ -106,8 +106,7 @@ for(m in 1:1){
       
       #Grids for KDE 
       h_grid <- seq(0.0001, 0.1, length.out = 1000)
-      x_grid <- seq(min(sample_tail), max(sample_tail), length.out = length(sample_tail))
-      
+
       # Binary Search -----------------------------------------------------------
       
       #Bandwidth value to compare with other samples
@@ -125,7 +124,6 @@ for(m in 1:1){
         s <- head(sort(sample(sample_tail, length(sample_tail), replace = T)),-tail_5[j])
         soroll <- h_0*rnorm(length(s))
         s_boot <-sort(sqrt(stdev^2/(stdev^2 + h_0^2))*(s +soroll)) 
-        x_grid <- seq(min(s_boot), max(s_boot), length.out = length(s_boot))
         sum <- sum + logconctest_cpp(kde_cpp(s_boot, s_boot,h_0), s_boot)
       }
       
@@ -137,10 +135,11 @@ for(m in 1:1){
     total_quantiles[[k]] <- quantiles
   }
 
+
   sim_data <- data.frame(p_values = unlist(total_p_values), quantiles = unlist(total_quantiles))
   sim_data$tail <- as.factor(rep(tail_size, 1000))
   sim_data$sim <- as.factor(rep(seq(1,1000), each=4))
-  sim_data$test <- as.factor(rep(0,4000))
+  sim_data$test <- as.factor(rep(m-1,4000))
   sample_df <- data.frame(sample = unlist(sample_list))
   write.csv(sample_df, paste(paste("samples_", m-1, sep = ""),".csv", sep = ""), row.names = F)
   write.csv(sim_data, paste(paste("sim_data_t_", m-1, sep = ""),".csv", sep = ""), row.names = F)
