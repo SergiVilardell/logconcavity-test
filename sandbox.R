@@ -11,16 +11,7 @@ sourceCpp("logconctest.cpp")
 
 # Read data ---------------------------------------------------------------
 
-test_file <- c("C:\\Users\\bscuser\\Projects\\wcet-test0\\long-test0.txt",
-               "C:\\Users\\bscuser\\Projects\\wcet-test0\\long-test1.txt",
-               "C:\\Users\\bscuser\\Projects\\wcet-test0\\long-test2.txt",
-               "C:\\Users\\bscuser\\Projects\\wcet-test0\\long-test3.txt",
-               "C:\\Users\\bscuser\\Projects\\wcet-test0\\long-test4.txt",
-               "C:\\Users\\bscuser\\Projects\\wcet-test0\\long-test5.txt",
-               "C:\\Users\\bscuser\\Projects\\wcet-test0\\long-test6.txt",
-               "C:\\Users\\bscuser\\Projects\\wcet-test0\\long-test7.txt",
-               "C:\\Users\\bscuser\\Projects\\wcet-test0\\long-test8.txt",
-               "C:\\Users\\bscuser\\Projects\\wcet-test0\\long-test9.txt")
+test_file <- c("/home/bill/BSC/data/long-test8.txt", "/home/bill/BSC/data/long-test9.txt")
 
 
 # Functions ---------------------------------------------------------------
@@ -70,7 +61,7 @@ binary_search_h <- function(h_grid, x_grid, sample_tail){
 
 # Test --------------------------------------------------------------------
 
-for(m in 1:1){ 
+for(m in 1:2){ 
   
   #Read data
   test0  <- data.table::fread(test_file[m],header = F,
@@ -90,7 +81,7 @@ for(m in 1:1){
   
   # Prepare tail sample -----------------------------------------------------
   
-  for (k in 250:1000) {
+  for (k in 1:1000) {
     print(k)
     sample_data <- sample(test0$X, size = 1000, replace = T)
     sample_list[[k]] <- sample_data
@@ -140,10 +131,10 @@ for(m in 1:1){
   sim_data <- data.frame(p_values = unlist(total_p_values), quantiles = unlist(total_quantiles))
   sim_data$tail <- as.factor(rep(tail_size, 1000))
   sim_data$sim <- as.factor(rep(seq(1,1000), each=4))
-  sim_data$test <- as.factor(rep(0,4000))
+  sim_data$test <- as.factor(rep(m-1,4000))
   sample_df <- data.frame(sample = unlist(sample_list))
-  write.csv(sample_df, paste(paste("samples_", m-1, sep = ""),".csv", sep = ""), row.names = F)
-  write.csv(sim_data, paste(paste("sim_data_t_", m-1, sep = ""),".csv", sep = ""), row.names = F)
+  write.csv(sample_df, paste(paste("samples_", m+8, sep = ""),".csv", sep = ""), row.names = F)
+  write.csv(sim_data, paste(paste("sim_data_t_", m+8, sep = ""),".csv", sep = ""), row.names = F)
 }
 
 
