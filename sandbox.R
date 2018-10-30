@@ -61,7 +61,7 @@ binary_search_h <- function(h_grid, x_grid, sample_tail){
 
 # Test --------------------------------------------------------------------
 
-for(m in 1:length(test_file)){ 
+for(m in 1:2){ 
   
   #Read data
   test0  <- data.table::fread(test_file[m],header = F,
