@@ -9,9 +9,12 @@ int logconctest_cpp(NumericVector x, NumericVector x_g) {
   int i;  
 
   for(i = 0; i < n-1; i++){
-   out[i] = log(x[i+1]) -log(x[i]);
-   out[i+1] = log(x[i+2])-log(x[i+1]);
-   if((out[i+1]/(x_g[i+2]-x_g[i+1]) - out[i]/(x_g[i+1]-x_g[i]))>0){return 0;}
+    
+   if( (x_g[i+1]-x_g[i] == 0) || (x_g[i+2]-x_g[i+1] == 0)){continue;}
+   
+   out[i] = (log(x[i+1])-log(x[i]))/(x_g[i+1]-x_g[i]) ;
+   out[i+1] = (log(x[i+2])-log(x[i+1]))/(x_g[i+2]-x_g[i+1]);
+   if((out[i+1] - out[i])>0){return 0;}
   }
   return 1;
 }
